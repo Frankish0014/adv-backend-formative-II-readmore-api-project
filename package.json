@@ -1,0 +1,28 @@
+{
+  "name": "adv-backend-formative-ii-readmore-api-project",
+  "version": "1.0.0",
+  "description": "ReadMore bookstore API",
+  "homepage": "https://github.com/Frankish0014/adv-backend-formative-II-readmore-api-project#readme",
+  "bugs": {
+    "url": "https://github.com/Frankish0014/adv-backend-formative-II-readmore-api-project/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Frankish0014/adv-backend-formative-II-readmore-api-project.git"
+  },
+  "license": "ISC",
+  "author": "Frank Ishimwe",
+  "type": "commonjs",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "dotenv": "^18.0.9",
+    "express": "^5.3.0",
+    "mongoose": "^9.12.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.11"
+  }
+}
