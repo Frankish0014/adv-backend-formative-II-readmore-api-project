@@ -1,12 +1,38 @@
 const Book = require("../models/book");
 const Author = require("../models/author");
+
+const validateBookRules = (body, res) => {
+  const currentYear = new Date().getFullYear();
+
+  if (body.price !== undefined && Number(body.price) <= 0) {
+    res.status(422).json({ message: "Price must be greater than 0" });
+    return false;
+  }
+
+  if (body.publishedYear !== undefined) {
+    const year = Number(body.publishedYear);
+    if (year < 1450 || year > currentYear) {
+      res.status(422).json({
+        message: `Published year must be from 1450 to ${currentYear}`,
+      });
+      return false;
+    }
+  }
+
+  return true;
+};
+
 const createBook = async (req, res) => {
     try {
       const author = await Author.findById(req.body.author);
       if (!author) {
         return res.status(400).json({ message: "Author does not exist" });
       }
-  
+
+      if (!validateBookRules(req.body, res)) {
+        return;
+      }
+
       const booksByAuthor = await Book.find({ author: author._id });
       const duplicate = booksByAuthor.find(
         (item) => item.title.toLowerCase() === req.body.title.toLowerCase()
@@ -49,6 +75,10 @@ const updateBook = async (req, res) => {
     const book = await Book.findById(req.params.id);
     if (!book) {
       return res.status(404).json({ message: "Book not found" });
+    }
+
+    if (!validateBookRules(req.body, res)) {
+      return;
     }
 
     if (req.body.title) {
