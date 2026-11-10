@@ -50,14 +50,47 @@ const createBook = async (req, res) => {
     }
   };
 
-const getBooks = async (req, res) => {
+  const getBooks = async (req, res) => {
     try {
-        const books = await Book.find().populate("author");
-        res.json(books);
+      const { genre, minPrice, maxPrice, author, search, sort, order } = req.query;
+      const filter = {};
+  
+      if (genre) {
+        filter.genre = genre;
+      }
+  
+      if (minPrice !== undefined || maxPrice !== undefined) {
+        filter.price = {};
+        if (minPrice !== undefined) {
+          filter.price.$gte = Number(minPrice);
+        }
+        if (maxPrice !== undefined) {
+          filter.price.$lte = Number(maxPrice);
+        }
+      }
+  
+      if (author) {
+        filter.author = author;
+      }
+  
+      if (search) {
+        filter.title = { $regex: search, $options: "i" };
+      }
+  
+      let query = Book.find(filter).populate("author");
+  
+      const allowedSorts = ["price", "title", "publishedYear"];
+      if (sort && allowedSorts.includes(sort)) {
+        const direction = order === "desc" ? -1 : 1;
+        query = query.sort({ [sort]: direction });
+      }
+  
+      const books = await query;
+      res.json(books);
     } catch (error) {
-        res.status(500).json({ message: "Failed to get books" });
+      res.status(500).json({ message: error.message });
     }
-};
+  };
 
 const getBook = async (req, res) => {
     try {
