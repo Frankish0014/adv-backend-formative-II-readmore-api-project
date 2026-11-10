@@ -6,7 +6,8 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 app.use(express.json());
-
+const authorRoutes = require("./routes/authorRoute");
+app.use("/authors", authorRoutes);
 app.get('/', (req, res) => {
     res.json({ Message:'Our ReadMore API is running'});
 });
