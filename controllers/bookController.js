@@ -85,8 +85,12 @@ const createBook = async (req, res) => {
         query = query.sort({ [sort]: direction });
       }
   
-      const books = await query;
-      res.json(books);
+      const page = Math.max(Number(req.query.page) || 1, 1);
+      const limit = Math.max(Number(req.query.limit) || 10, 1);
+      const total = await Book.countDocuments(filter);
+      const results = await query.skip((page - 1) * limit).limit(limit);
+
+      res.json({ page, limit, total, results });
     } catch (error) {
       res.status(500).json({ message: error.message });
     }
