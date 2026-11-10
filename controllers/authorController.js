@@ -66,10 +66,45 @@ const deleteAuthor = async (req, res) => {
   }
 };
 
+const getAuthorStats = async (req, res) => {
+  try {
+    const author = await Author.findById(req.params.id);
+    if (!author) {
+      return res.status(404).json({ message: "Author not found" });
+    }
+
+    const books = await Book.find({ author: author._id }).sort({ price: 1 });
+
+    if (books.length === 0) {
+      return res.json({
+        author: author.name,
+        bookCount: 0,
+        averagePrice: 0,
+        cheapestBook: null,
+        mostExpensiveBook: null,
+      });
+    }
+
+    const total = books.reduce((sum, book) => sum + book.price, 0);
+    const averagePrice = Math.round((total / books.length) * 100) / 100;
+
+    res.json({
+      author: author.name,
+      bookCount: books.length,
+      averagePrice,
+      cheapestBook: books[0].title,
+      mostExpensiveBook: books[books.length - 1].title,
+    });
+  } catch (error) {
+    res.status(404).json({ message: "Author not found" });
+  }
+};
+
 module.exports = {
   createAuthor,
   getAuthors,
   getAuthor,
   updateAuthor,
   deleteAuthor,
+  getAuthorStats,
 };
