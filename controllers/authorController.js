@@ -1,4 +1,5 @@
 const Author = require("../models/author");
+const Book = require("../models/book");
 
 const createAuthor = async (req, res) => {
   try {
@@ -44,13 +45,21 @@ const updateAuthor = async (req, res) => {
     res.status(404).json({ message: "Author not found" });
   }
 };
-
 const deleteAuthor = async (req, res) => {
   try {
-    const author = await Author.findByIdAndDelete(req.params.id);
+    const author = await Author.findById(req.params.id);
     if (!author) {
       return res.status(404).json({ message: "Author not found" });
     }
+
+    const books = await Book.find({ author: author._id });
+    if (books.length > 0) {
+      return res.status(409).json({
+        message: "Cannot delete an author who still has books",
+      });
+    }
+
+    await Author.findByIdAndDelete(req.params.id);
     res.json({ message: "Author deleted" });
   } catch (error) {
     res.status(404).json({ message: "Author not found" });
