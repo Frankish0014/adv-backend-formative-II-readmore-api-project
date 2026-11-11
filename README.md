@@ -1,5 +1,7 @@
 # ReadMore API — Express + MongoDB (Mongoose)
 
+Video Walkthrough: https://www.loom.com/share/2d5d087389d242a6bf5e7ef1907aa887
+
 Your first backend API assignment. Build a small REST API for a bookstore using **Express.js**, with **MongoDB** as the database and **Mongoose** as the modelling layer.
 
 There are **two entities** — **Author** and **Book** — and they are **linked**: one author can have many books, and every book belongs to one author. You will model them, connect to MongoDB, and build endpoints for each.
