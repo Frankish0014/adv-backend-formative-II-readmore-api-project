@@ -42,9 +42,13 @@ const updateAuthor = async (req, res) => {
     }
     res.json(author);
   } catch (error) {
+    if (error.name === "ValidationError") {
+      return res.status(400).json({ message: error.message });
+    }
     res.status(404).json({ message: "Author not found" });
   }
 };
+
 const deleteAuthor = async (req, res) => {
   try {
     const author = await Author.findById(req.params.id);
