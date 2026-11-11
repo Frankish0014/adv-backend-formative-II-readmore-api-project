@@ -1,13 +1,13 @@
 const express = require("express");
-const { getBooksByAuthor } = require("../controllers/bookController");
 const {
-    createAuthor,
-    getAuthors,
-    getAuthor,
-    updateAuthor,
-    deleteAuthor,
-    getAuthorStats,
+  createAuthor,
+  getAuthors,
+  getAuthor,
+  updateAuthor,
+  deleteAuthor,
+  getAuthorStats,
 } = require("../controllers/authorController");
+const { getBooksByAuthor } = require("../controllers/bookController");
 
 const router = express.Router();
 
